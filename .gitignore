@@ -1,0 +1,6 @@
+evals/results/
+openai/dist/
+.DS_Store
+Thumbs.db
+desktop.ini
+__MACOSX/

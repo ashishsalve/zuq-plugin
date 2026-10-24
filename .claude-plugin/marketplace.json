@@ -1,0 +1,18 @@
+{
+  "name": "zuq",
+  "description": "ZUQ for Claude Code: make narrated explainer videos, video courses and training videos in your ZUQ account.",
+  "owner": {
+    "name": "Ashish Salve",
+    "email": "billing@zuq.si",
+    "url": "https://zuq.si"
+  },
+  "plugins": [
+    {
+      "name": "zuq",
+      "source": "./",
+      "description": "Turn a prompt or a document into a narrated explainer video, video course or training video.",
+      "category": "productivity",
+      "tags": ["video", "education", "training"]
+    }
+  ]
+}

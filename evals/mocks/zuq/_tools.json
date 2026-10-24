@@ -1,0 +1,741 @@
+{
+  "tools": [
+    {
+      "name": "create_explainer_video",
+      "title": "Make an explainer video",
+      "description": "Use this when the user wants one topic or question explained, taught or shown as a video: makes one narrated, animated explainer video or video lesson at the viewer's level, from beginner to expert. Starts a build in the user's ZUQ account and returns a video_id at once; the build spends the requested minutes of video from that account and runs in the background. A document the user shared to be explained is create_document_video; a whole subject taught in several lessons is create_training_course. Not for editing the user's own footage, realistic or avatar video, or short ads.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 4000,
+            "description": "What the video should explain, in the user's words, with any details they gave: audience, examples, what to stress. Example: \"How compound interest works, with a savings example, for teenagers\"."
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 180,
+            "description": "Length in whole minutes, 1 to 180. get_account_limits returns the longest video this account can make."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              "expert"
+            ],
+            "default": "intermediate",
+            "description": "How much the viewer already knows. Defaults to intermediate."
+          }
+        },
+        "required": [
+          "topic",
+          "minutes"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "description": "Handle for get_video."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "done",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "explainer",
+              "document",
+              "course"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "minutes": {
+            "type": "number",
+            "description": "Runtime ordered, also the minutes held from the account."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              "expert"
+            ]
+          },
+          "minutes_left": {
+            "type": "number",
+            "description": "Minutes the account has left this month after this build."
+          },
+          "watch_url": {
+            "type": "string",
+            "description": "The video's page on zuq.si; the owner signs in to watch. It starts playing while later parts are still being made."
+          },
+          "duplicate": {
+            "type": "boolean",
+            "description": "True when an identical request in the last 2 minutes already started this video, so nothing new was charged."
+          }
+        },
+        "required": [
+          "video_id",
+          "status",
+          "format",
+          "title",
+          "minutes",
+          "level",
+          "minutes_left",
+          "watch_url",
+          "duplicate"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Make an explainer video",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false,
+        "idempotentHint": false
+      },
+      "_meta": {
+        "anthropic/requiresUserInteraction": true
+      }
+    },
+    {
+      "name": "create_document_video",
+      "title": "Explain a document as a video",
+      "description": "Use this when the user asks for a video of a document they shared - PDF, text, Markdown or pasted text: makes a narrated, animated video that explains the document in plain words, such as an employee handbook, a policy, a research paper, a technical spec or lecture notes. Takes the document's own text, up to 20,000 characters. Starts a build in the user's ZUQ account and returns a video_id at once; the build spends the requested minutes of video from that account. It explains what the document says and gives no legal, financial or medical advice. Not for documents that hold health records, ID numbers or payment details.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "document_text": {
+            "type": "string",
+            "minLength": 50,
+            "maxLength": 20000,
+            "description": "The text of the document the user asked to turn into a video, as written, up to 20,000 characters, keeping its headings and section numbers so the video can refer to them."
+          },
+          "document_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "The file name or title of the document, for example \"Staff handbook 2026.pdf\"."
+          },
+          "focus": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "Optional. What the user wants explained or stressed, in their words, for example \"the leave policy and how to ask for time off\". Without it the video explains the whole document."
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 180,
+            "description": "Length in whole minutes, 1 to 180."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              "expert"
+            ],
+            "default": "intermediate",
+            "description": "How much the viewer already knows. Defaults to intermediate."
+          }
+        },
+        "required": [
+          "document_text",
+          "document_name",
+          "minutes"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "description": "Handle for get_video."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "done",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "explainer",
+              "document",
+              "course"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "minutes": {
+            "type": "number",
+            "description": "Runtime ordered, also the minutes held from the account."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              "expert"
+            ]
+          },
+          "minutes_left": {
+            "type": "number",
+            "description": "Minutes the account has left this month after this build."
+          },
+          "watch_url": {
+            "type": "string",
+            "description": "The video's page on zuq.si; the owner signs in to watch. It starts playing while later parts are still being made."
+          },
+          "duplicate": {
+            "type": "boolean",
+            "description": "True when an identical request in the last 2 minutes already started this video, so nothing new was charged."
+          }
+        },
+        "required": [
+          "video_id",
+          "status",
+          "format",
+          "title",
+          "minutes",
+          "level",
+          "minutes_left",
+          "watch_url",
+          "duplicate"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Explain a document as a video",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false,
+        "idempotentHint": false
+      },
+      "_meta": {
+        "anthropic/requiresUserInteraction": true
+      }
+    },
+    {
+      "name": "create_training_course",
+      "title": "Build a training course",
+      "description": "Use this when the user wants a video course or an employee training course: a subject taught in order, lesson by lesson, each lesson a narrated, animated video. Works from a topic, from the user's notes, a handbook or a policy, and from a lesson plan the user approved in the chat. Starts a build in the user's ZUQ account and returns a video_id at once; the build spends the course's total minutes from that account. A single short explanation is create_explainer_video.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 4000,
+            "description": "What the course should teach and to whom, in the user's words, for example \"Excel pivot tables for new finance hires\" or \"our code of conduct for all staff\"."
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 1800,
+            "description": "Total runtime of the whole course in whole minutes, 5 to 1800. Each lesson is built as videos of up to 3 minutes."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              "expert"
+            ],
+            "default": "intermediate",
+            "description": "How much the learner already knows. Defaults to intermediate."
+          },
+          "lessons": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 60,
+            "description": "The lesson plan the user approved in the chat, in order: 2 to 60 lessons, at most one lesson per minute of runtime. Without it, ZUQ plans the lessons during the build.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "description": "Lesson title."
+                },
+                "objectives": {
+                  "type": "array",
+                  "maxItems": 3,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  "description": "Up to three things the learner can do after the lesson."
+                }
+              },
+              "required": [
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "course_title": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Optional. The course title from the approved plan."
+          },
+          "course_goal": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Optional. One sentence on what the learner can do after the course."
+          },
+          "material_text": {
+            "type": "string",
+            "maxLength": 20000,
+            "description": "Optional. Text the course teaches from, such as the user's notes or a policy they shared, as written, up to 20,000 characters."
+          },
+          "material_name": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "The name of that material, for example \"Code of conduct 2026\". Needed when material_text is given."
+          }
+        },
+        "required": [
+          "subject",
+          "minutes"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "description": "Handle for get_video."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "done",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "explainer",
+              "document",
+              "course"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "minutes": {
+            "type": "number",
+            "description": "Runtime ordered, also the minutes held from the account."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced",
+              "expert"
+            ]
+          },
+          "minutes_left": {
+            "type": "number",
+            "description": "Minutes the account has left this month after this build."
+          },
+          "watch_url": {
+            "type": "string",
+            "description": "The video's page on zuq.si; the owner signs in to watch. It starts playing while later parts are still being made."
+          },
+          "duplicate": {
+            "type": "boolean",
+            "description": "True when an identical request in the last 2 minutes already started this video, so nothing new was charged."
+          }
+        },
+        "required": [
+          "video_id",
+          "status",
+          "format",
+          "title",
+          "minutes",
+          "level",
+          "minutes_left",
+          "watch_url",
+          "duplicate"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Build a training course",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "openWorldHint": false,
+        "idempotentHint": false
+      },
+      "_meta": {
+        "anthropic/requiresUserInteraction": true
+      }
+    },
+    {
+      "name": "get_video",
+      "title": "Check a video",
+      "description": "Use this when the user asks whether a ZUQ video or course is ready, how a build is going, or for its link: returns the status, progress, watch link and share link of one video by its video_id. Read-only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "description": "The video_id a create tool or list_my_videos returned."
+          }
+        },
+        "required": [
+          "video_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "explainer",
+              "document",
+              "course"
+            ]
+          },
+          "level": {
+            "type": "string"
+          },
+          "minutes": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "done",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "progress": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "stage": {
+            "type": "string",
+            "description": "Plain-words build stage, such as Waiting for a build slot or Ready to watch."
+          },
+          "watch_url": {
+            "type": "string"
+          },
+          "share_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The video's share page once it exists; who can open it depends on visibility."
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "private",
+              "link",
+              "public"
+            ]
+          },
+          "minutes_refunded": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "failure_reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "refused",
+              "material_unusable",
+              "account_check",
+              "cancelled",
+              "build_error",
+              null
+            ],
+            "description": "Why a failed build did not finish, as a fixed code."
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why a failed build did not finish, in plain words, from a fixed list."
+          }
+        },
+        "required": [
+          "video_id",
+          "title",
+          "format",
+          "level",
+          "minutes",
+          "status",
+          "progress",
+          "stage",
+          "watch_url",
+          "share_url",
+          "visibility",
+          "minutes_refunded",
+          "failure_reason",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Check a video",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false,
+        "idempotentHint": true
+      }
+    },
+    {
+      "name": "list_my_videos",
+      "title": "List my videos",
+      "description": "Use this when the user asks to find, list or reopen videos and courses they made with ZUQ: returns the most recent ones, newest first, with their status and watch links. Read-only. get_video returns the details of one video.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 10,
+            "description": "How many videos to return, 1 to 20."
+          },
+          "cursor": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Pass next_cursor from the previous call to see older videos."
+          }
+        },
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "videos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "video_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "explainer",
+                    "document",
+                    "course"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "queued",
+                    "running",
+                    "done",
+                    "failed",
+                    "cancelled"
+                  ]
+                },
+                "minutes": {
+                  "type": "number"
+                },
+                "created_on": {
+                  "type": "string",
+                  "description": "Calendar date the video was ordered, YYYY-MM-DD (UTC)."
+                },
+                "watch_url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "video_id",
+                "title",
+                "format",
+                "status",
+                "minutes",
+                "created_on",
+                "watch_url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "next_cursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "videos",
+          "next_cursor"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "List my videos",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false,
+        "idempotentHint": true
+      }
+    },
+    {
+      "name": "get_account_limits",
+      "title": "Check minutes and limits",
+      "description": "Use this when the user asks how many minutes of video their ZUQ account has left, or before a long build to check it fits: returns the minutes left this month, the longest video the account can make, the length range of each format, and whether the account must finish setup on zuq.si first. Read-only; it never buys or changes anything.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "minutes_left": {
+            "type": "number"
+          },
+          "minutes_used_this_month": {
+            "type": "number"
+          },
+          "resets_on": {
+            "type": "string",
+            "description": "First day of next month, YYYY-MM-DD (UTC), when the monthly minutes reset."
+          },
+          "longest_video_minutes": {
+            "type": "number"
+          },
+          "shared_team_minutes": {
+            "type": "boolean",
+            "description": "True when the minutes belong to a team the user is on."
+          },
+          "ready_to_build": {
+            "type": "boolean"
+          },
+          "setup_needed": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "What to do on zuq.si before the first build, or null."
+          },
+          "formats": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "format": {
+                  "type": "string",
+                  "enum": [
+                    "explainer",
+                    "document",
+                    "course"
+                  ]
+                },
+                "min_minutes": {
+                  "type": "number"
+                },
+                "max_minutes": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "format",
+                "min_minutes",
+                "max_minutes"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "document_text_max_chars": {
+            "type": "integer"
+          },
+          "course_lessons_max": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "minutes_left",
+          "minutes_used_this_month",
+          "resets_on",
+          "longest_video_minutes",
+          "shared_team_minutes",
+          "ready_to_build",
+          "setup_needed",
+          "formats",
+          "document_text_max_chars",
+          "course_lessons_max"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "title": "Check minutes and limits",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": false,
+        "idempotentHint": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "zuq",
+  "version": "1.0.0",
+  "description": "Turn a prompt or a document into a narrated, animated explainer video, a video course or a training video in your ZUQ account, check its progress, and open it on zuq.si.",
+  "author": {
+    "name": "Ashish Salve",
+    "email": "billing@zuq.si",
+    "url": "https://zuq.si"
+  },
+  "homepage": "https://zuq.si",
+  "repository": "https://github.com/ashishsalve/zuq-plugin",
+  "license": "MIT",
+  "keywords": [
+    "video course",
+    "explainer video",
+    "training video",
+    "document to video"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ZUQ",
+        "shortDescription": "Turn docs into video courses",
+        "longDescription": "Turn a prompt or a document into a narrated, animated explainer video, a full video course, or a training video. Ask about a topic, or share a PDF, notes, a policy or a handbook, and get a video that explains it in plain words at your level, from beginner to expert.\n\nWhat you can do with ZUQ in ChatGPT:\n- Explain a topic or a question as a narrated, animated explainer video, pitched at beginner, intermediate, advanced or expert level.\n- Turn a document - an employee handbook, a policy, a research paper, a technical spec or your notes - into a video that explains it in plain words.\n- Build a training course taught lesson by lesson, from one request or from your own notes, for learning a subject from scratch or for onboarding and policy training. Review the lesson plan in the chat before anything is built.\n- Check how a build is going, open it on zuq.si, and find the videos and courses you made before.\n- See how many minutes of video your account has left and the longest video it can make.\n\nWho it is for: students and self-learners, teachers, trainers and team leads who need onboarding or policy training, and anyone who has to understand a document before following it.\n\nHow it works: connect your ZUQ account with your email and password. Each video is a sequence of animated scenes - text, diagrams, charts and worked examples - rendered from code, with a synthesized voice reading the script over background music that may be AI-generated. No video generation model is used. Each build uses minutes of video from that account, and ChatGPT can ask you to confirm before a build starts. A typical video is ready to stream within a minute or two of starting; a longer one can be watched while later parts are still being made. Every video is private by default and plays on its own page at zuq.si.\n\nLimitations:\n- ZUQ explains what a document says. It does not give legal, financial or medical advice.\n- It makes animated explainers with narration. It does not make realistic footage or avatars, and it does not edit your own recordings.\n- A document is read as text, up to 20,000 characters per video.\n- Video length limits depend on your ZUQ account. A new account confirms its email and completes a one-time check on zuq.si before its first build.\n- Depending on your ZUQ account, videos may carry a ZUQ watermark.\n- Do not send documents that hold health records, ID numbers or payment details.\n- MP4 download, captions (SRT, VTT) and transcripts are on the video's page at zuq.si; the MP4 is made in desktop Chrome, Edge, Brave or Opera.",
+        "developerName": "Ashish Salve",
+        "category": "Education & Research",
+        "capabilities": [
+          "Explain a topic as a narrated, animated explainer video at your level",
+          "Turn a handbook, policy or research paper into a plain-words video",
+          "Build a training course taught lesson by lesson",
+          "Review the lesson plan in the chat before a course is built",
+          "Check build progress and get the watch link",
+          "Find the videos and courses you made before",
+          "See the minutes your account has left"
+        ],
+        "websiteURL": "https://zuq.si",
+        "supportURL": "https://zuq.si/docs/chatgpt-and-claude/",
+        "privacyPolicyURL": "https://zuq.si/privacy-policy/",
+        "termsOfServiceURL": "https://zuq.si/terms-of-service/",
+        "defaultPrompt": [
+          "Turn this PDF into a short video course with lessons for beginners",
+          "Make a plain-English video that walks me through this research paper",
+          "Turn our employee handbook into a 10-minute training course for new hires"
+        ],
+        "brandColor": "#0b0d0c",
+        "brandColorDark": "#5ff0b8",
+        "composerIcon": "./assets/icon.png",
+        "composerIconDark": "./assets/icon-dark.png",
+        "logo": "./assets/logo.png",
+        "logoDark": "./assets/logo-dark.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Explainer video from a topic",
+              "prompt": "Make a 3-minute explainer video about how vaccines work, for beginners.",
+              "tools_triggered": "create_explainer_video",
+              "expected_behavior": "Uses 3 minutes and the beginner level, asks the user to approve the build, starts it once, and replies with the title, that it is building, and a https://zuq.si/library/ link."
+            },
+            {
+              "description": "Document video from an attached staff handbook",
+              "prompt": "Explain the leave section of this staff handbook to me as a 3-minute video.",
+              "tools_triggered": "create_document_video",
+              "expected_behavior": "Sends the handbook's own text with the leave-section focus, starts one 3-minute document video after approval, and returns the watch link. On a surface without file attachments, pasting the handbook text into the chat gives the same result.",
+              "file_attachment_urls": [
+                "https://zuq.si/samples/review/sample-handbook.pdf"
+              ]
+            },
+            {
+              "description": "Training course from an approved plan",
+              "prompt": "Make a 10-minute beginner video course on Excel pivot tables. Show me the lessons first.",
+              "tools_triggered": "create_training_course",
+              "expected_behavior": "Shows a plan of 2 to 10 lessons and waits for approval; after the user approves, starts the course with that plan and returns the watch link."
+            },
+            {
+              "description": "Find a finished video and its link",
+              "prompt": "Is my video about photosynthesis ready? Give me the link.",
+              "tools_triggered": "list_my_videos, get_video",
+              "expected_behavior": "Finds the sample video about photosynthesis in the test account, reports that it is ready to watch, and gives its https://zuq.si/library/ link."
+            },
+            {
+              "description": "Minutes left",
+              "prompt": "How many ZUQ minutes do I have left this month?",
+              "tools_triggered": "get_account_limits",
+              "expected_behavior": "Reports the minutes left and the reset date of the test account; names no plan or price and offers no purchase."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Realistic avatar of the user (not offered; likeness and voice of a real person)",
+              "prompt": "Make a realistic video of me presenting our product, using my face and my voice."
+            },
+            {
+              "description": "Medical advice (ZUQ explains material, it does not advise)",
+              "prompt": "Which medication should I take for my back pain?"
+            },
+            {
+              "description": "Buying minutes (digital goods cannot be sold in the plugin)",
+              "prompt": "Buy 300 more ZUQ minutes for me."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments. Builds use minutes the user already has in their ZUQ account."
+      },
+      "publication": {
+        "countries": [],
+        "release_notes": "Initial release: make explainer videos, document videos and training courses in your ZUQ account, check their progress, list your videos, and see the minutes you have left."
+      }
+    }
+  }
+}

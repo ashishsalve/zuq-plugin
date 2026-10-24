@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zuq": {
+      "type": "http",
+      "url": "https://zuq.si/mcp"
+    }
+  }
+}

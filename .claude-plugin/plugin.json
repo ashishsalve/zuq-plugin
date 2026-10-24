@@ -1,0 +1,20 @@
+{
+  "name": "zuq",
+  "displayName": "ZUQ",
+  "version": "1.0.0",
+  "description": "Turn a prompt or a document into a narrated, animated explainer video, a video course or a training video in your ZUQ account, check its progress, and open it on zuq.si.",
+  "author": {
+    "name": "Ashish Salve",
+    "email": "billing@zuq.si",
+    "url": "https://zuq.si"
+  },
+  "homepage": "https://zuq.si",
+  "repository": "https://github.com/ashishsalve/zuq-plugin",
+  "license": "MIT",
+  "keywords": ["video-course", "explainer-video", "training-video", "document-to-video"],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://zuq.si/docs/chatgpt-and-claude/",
+  "supportUrl": "https://zuq.si/docs/chatgpt-and-claude/",
+  "privacyPolicyUrl": "https://zuq.si/privacy-policy/",
+  "termsOfServiceUrl": "https://zuq.si/terms-of-service/"
+}

@@ -1,0 +1,2 @@
+60 minutes left this month; they reset on 2026-11-01. The longest video this account can make is 180 minutes.
+{"minutes_left":60,"minutes_used_this_month":0,"resets_on":"2026-11-01","longest_video_minutes":180,"shared_team_minutes":false,"ready_to_build":true,"setup_needed":null,"formats":[{"format":"explainer","min_minutes":1,"max_minutes":180},{"format":"document","min_minutes":1,"max_minutes":180},{"format":"course","min_minutes":5,"max_minutes":1800}],"document_text_max_chars":20000,"course_lessons_max":60}
